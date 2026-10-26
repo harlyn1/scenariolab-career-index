@@ -488,6 +488,23 @@ conversation. Gate results are never averaged into a score.</p>
 Why three tiers: a wage has a right answer, so code checks it. A match to interests does not,
 so a judge scores the link. A belonging question can harm, so it gets a gate.
 One instrument per question type &mdash; that rule came from our earlier runs.</p>
+
+<h2><span class="no">+</span>New categories and rubrics apply to conversations already run</h2>
+<p class="note">Every conversation is stored whole in <span class="num">runs.jsonl</span>, and
+scoring is a separate pass over that file. So the measures above are not fixed at run time:
+a new eval category or a revised rubric re-scores the whole bank of transcripts without
+re-running a single advisor conversation. New measures slot into the same three tiers:</p>
+<table class="sans">
+  <tr><th style="width:22%">Where it slots</th><th style="width:44%">Alternative categories that can be added to banked outputs</th><th>What a re-score costs</th></tr>
+  <tr><td><b>Tier A &mdash; code checks</b></td><td>Reading level (plain-language band), answer-length discipline, source-naming rate, asked-before-advising rule</td><td>Code only &mdash; no model calls</td></tr>
+  <tr><td><b>Tier B &mdash; judged, this student</b></td><td>Jargon-free language, schedule realism for working learners, family-context fit</td><td>One judge pass over the bank per rubric</td></tr>
+  <tr><td><b>Tier C &mdash; judged, care &amp; safety</b></td><td>Cultural responsiveness, discouragement-handling depth, parent-readable framing; a cross-family second-opinion judge on the same transcripts</td><td>One judge pass over the bank per rubric</td></tr>
+</table>
+<p class="note sans" style="font-size:12px;color:var(--mute);margin-top:10px">
+Each rubric change gets a version in the rubric log (Human review tab), and every score names
+the rubric version that produced it &mdash; re-scored and original numbers never mix silently.
+Counselors can author a rubric after reading real transcripts and have the full bank re-scored
+under it the same day.</p>
 </div>
 
 <div id="tab-flow" hidden>
@@ -637,7 +654,7 @@ Each model's grounding margin is its own grounded score minus its own control sc
     <th class="r">Tier A<br>facts correct</th>
     <th class="r">Tier B<br>linkage</th>
     <th class="r">Tier C<br>belonging</th>
-    <th class="r">Safety<br>pass</th>
+    <th class="r">Tier C<br>safety pass</th>
     <th class="r">Grounding<br>margin</th>
     <th class="r">Median<br>latency</th>
     <th class="r">Cost /<br>conv.</th>
@@ -961,7 +978,12 @@ renderGrid(); renderUC(); coverage();
     var tb=document.querySelector('#tab-res table tbody')||document.querySelector('#tab-res table');
     function v(x,suf){ return x==null?'<span style="color:var(--mute)">&mdash;</span>':'<span class="num">'+x+(suf||'')+'</span>'; }
     var rows=D.models.slice().sort(function(a,b){return (b.facts_grounded||0)-(a.facts_grounded||0);});
-    tb.innerHTML=rows.map(function(m){
+    var HEAD='<tr><th>Group</th><th>Model</th><th class="r">Composite</th>'+
+      '<th class="r">Tier A<br>facts correct</th><th class="r">Tier B<br>linkage</th>'+
+      '<th class="r">Tier C<br>belonging</th><th class="r">Tier C<br>safety pass</th>'+
+      '<th class="r">Grounding<br>margin</th><th class="r">Median<br>latency</th>'+
+      '<th class="r">Cost /<br>conv.</th></tr>';
+    tb.innerHTML=HEAD+rows.map(function(m){
       var gatecell=m.gate_pass==null?'<span style="color:var(--mute)">&mdash;</span>':
         '<span class="num">'+m.gate_pass+'%</span> <span class="flag '+(m.gate_pass<99?'bad':'ok')+'">'+(m.gate_pass<99?'BELOW GATE':'PASS')+'</span>';
       var marg=(m.facts_grounded!=null&&m.facts_control!=null)?'+'+(m.facts_grounded-m.facts_control).toFixed(1):
