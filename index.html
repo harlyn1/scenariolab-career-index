@@ -51,6 +51,9 @@
   .pend{color:var(--mute);font-style:italic;font-size:12px}
   .pendbox{border:1px dashed var(--line);padding:16px 18px;color:var(--mute);
     font-family:Helvetica,Arial,sans-serif;font-size:13px;margin-top:14px}
+  .mchip{display:inline-block;width:16px;height:16px;border-radius:50%;color:#fff;
+    font-family:Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;text-align:center;
+    line-height:16px;margin-right:6px;vertical-align:-2px;letter-spacing:0}
   .whatis{cursor:pointer;border-bottom:1px dotted var(--mute)}
   .whatis:hover{color:var(--bar);border-bottom-color:var(--bar)}
   #defpop{position:absolute;z-index:50;max-width:330px;background:var(--paper);
@@ -294,6 +297,11 @@ student, it does not work.</p>
 </table>
 
 <h2><span class="no">4</span>Simulation outputs <span id="simlive"></span></h2>
+<div class="seg sans" id="simseg" style="display:none;margin:4px 0 12px">
+  <button id="simseg-all" class="on" onclick="setSimTrack('')">All tracks</button>
+  <button id="simseg-hs" onclick="setSimTrack('hs')">High school</button>
+  <button id="simseg-ca" onclick="setSimTrack('ca')">College / adult</button>
+</div>
 <div id="simout" class="sans" style="border:1px dashed var(--line);padding:18px;color:var(--mute);font-size:13px">
 Waiting for results. Run the kit, then copy <span class="num">career_data.js</span> next to this
 file and reload. Outputs appear here per student model: act / ask more / step away, intent this
@@ -770,7 +778,7 @@ fill when the scorer logs failures by item.</p>
 </div>
 
 </div>
-<script src="career_data.js"></script>
+<script src="career_data.js?r=2160"></script>
 <script>
 function showTab(which){
   ['res','flow','tiers','grid','hitl','sim'].forEach(function(t){
@@ -778,6 +786,26 @@ function showTab(which){
     document.getElementById('bt-'+t).className = (t===which)?'on':'';
   });
   var dp=document.getElementById('defpop'); if(dp) dp.hidden=true;
+}
+
+/* ---------- provider marks next to model names ---------- */
+var PROV={"Claude":{c:"#CC785C",l:"C"},"GPT":{c:"#1C2127",l:"O"},
+  "Gemini":{c:"#3B6FD4",l:"G"},"Kimi":{c:"#20306B",l:"K"},"Qwen":{c:"#5A3FBF",l:"Q"}};
+function mlogo(name){
+  var k=Object.keys(PROV).find(function(p){return String(name).indexOf(p)===0;});
+  if(!k) return '';
+  var p=PROV[k];
+  return '<span class="mchip" style="background:'+p.c+'" title="'+k+' family">'+p.l+'</span>';
+}
+/* ---------- simulation track switcher ---------- */
+window.SIMTRACK='';
+function setSimTrack(t){
+  window.SIMTRACK=t;
+  ['all','hs','ca'].forEach(function(k){
+    var b=document.getElementById('simseg-'+k);
+    if(b) b.className=((k=='all'&&t=='')||(k==t))?'on':'';
+  });
+  if(window.renderSims) window.renderSims();
 }
 
 /* ---------- what-is popups on column titles ---------- */
@@ -1070,7 +1098,7 @@ renderGrid(); renderUC(); coverage();
         '<span class="num">'+m.gate_pass+'%</span> <span class="flag '+(m.gate_pass<99?'bad':'ok')+'">'+(m.gate_pass<99?'BELOW GATE':'PASS')+'</span>';
       var marg=(m.facts_grounded!=null&&m.facts_control!=null)?'+'+(m.facts_grounded-m.facts_control).toFixed(1):
         (m.control_declined!=null?'<span style="font-size:10px;color:var(--mute)">control declined '+m.control_declined+'%</span>':null);
-      return '<tr><td class="grp">&ndash;</td><td class="model">'+m.model+' <span class="flag ok">LIVE</span>'+
+      return '<tr><td class="grp">&ndash;</td><td class="model">'+mlogo(m.model)+m.model+' <span class="flag ok">LIVE</span>'+
         (m.provisional_facts?'<br><span style="font-size:10px;color:var(--gold)">draft answer key: facts provisional</span>':'')+
         '</td><td class="r">'+v(null)+'</td><td class="r">'+v(m.facts_grounded,'%')+'</td>'+
         '<td class="r">'+v(m.linkage)+'</td><td class="r">'+v(m.belonging)+'</td>'+
@@ -1090,32 +1118,47 @@ renderGrid(); renderUC(); coverage();
     var BNAMES={rational:"Rational student",irrational:"Irrational student",
       anxious_avoidant:"Anxious-avoidant student",social_proof:"Social-proof student",default:"Default"};
     document.getElementById('simlive').innerHTML='<span class="flag ok">LIVE</span>';
-    var behs=[]; D.sims.forEach(function(s){var b=s.behavior||'default'; if(behs.indexOf(b)<0) behs.push(b);});
+    var seg=document.getElementById('simseg'); if(seg) seg.style.display='inline-flex';
     function rows(list){
-      return list.map(function(s){return '<tr><td class="model">'+s.model+'</td><td>'+s.arm+'</td>'+
+      return list.map(function(s){return '<tr><td class="model">'+mlogo(s.model)+s.model+'</td><td>'+s.arm+'</td>'+
         '<td class="r num">'+s.n+'</td><td class="r num">'+s.act+'%</td><td class="r num">'+s.ask_more+'%</td>'+
         '<td class="r num">'+s.step_away+'%</td><td class="r num">'+s.intent_this_week+'%</td>'+
         '<td class="r num"'+(s.uncited_uptake>8?' style="color:var(--red);font-weight:bold"':'')+'>'+s.uncited_uptake+'%</td>'+
         '<td class="r num">'+s.trust_up+'%</td></tr>';}).join('');
     }
-    var html='<p class="note" style="margin-top:0">From results/sims.jsonl: '+D.n_sims+' state updates, '+
-      (D.sim_track=='hs'?'high school track only':'all tracks')+'. Uncited uptake = the student adopted a '+
-      'number the advisor gave without a source. Calibration against the outcome panel is pending.</p>';
-    behs.forEach(function(b){
-      var list=D.sims.filter(function(s){return (s.behavior||'default')==b;});
-      html+='<h3 class="sans" style="font-size:13px;letter-spacing:.06em;margin:22px 0 6px;color:var(--ink)">'+
-        (BNAMES[b]||b).toUpperCase()+'</h3>'+
-        '<div class="scroll"><table><tr><th>Advisor model</th>'+
-        '<th><span class="whatis" data-def="arm">Arm</span></th><th class="r">n</th>'+
-        '<th class="r"><span class="whatis" data-def="act">Acts</span></th>'+
-        '<th class="r"><span class="whatis" data-def="ask">Asks more</span></th>'+
-        '<th class="r"><span class="whatis" data-def="stepaway">Steps away</span></th>'+
-        '<th class="r"><span class="whatis" data-def="intent">Intent: this week</span></th>'+
-        '<th class="r"><span class="whatis" data-def="uncited">Uncited uptake</span></th>'+
-        '<th class="r"><span class="whatis" data-def="trust">Trust up</span></th></tr>'+rows(list)+'</table></div>';
-    });
-    var out=document.getElementById('simout');
-    out.style.border='none'; out.style.padding='0'; out.style.color='inherit'; out.innerHTML=html;
+    window.renderSims=function(){
+      var out=document.getElementById('simout');
+      var pool=D.sims.filter(function(s){return !window.SIMTRACK || (s.track||'hs')==window.SIMTRACK;});
+      if(!pool.length){
+        out.style.border='1px dashed var(--line)'; out.style.padding='18px';
+        out.style.color='var(--mute)'; out.style.fontSize='13px';
+        out.innerHTML='Pending. Simulations have run on the high school track only so far. '+
+          'The college and adult track fills on a later simulation pass over the same banked conversations.';
+        return;
+      }
+      var behs=[]; pool.forEach(function(s){var b=s.behavior||'default'; if(behs.indexOf(b)<0) behs.push(b);});
+      var lbl=window.SIMTRACK=='hs'?'high school track':window.SIMTRACK=='ca'?'college and adult track':
+        'all simulated tracks (high school only so far)';
+      var html='<p class="note" style="margin-top:0">From results/sims.jsonl: '+D.n_sims+' state updates, showing '+lbl+
+        '. Uncited uptake = the student adopted a '+
+        'number the advisor gave without a source. Calibration against the outcome panel is pending.</p>';
+      behs.forEach(function(b){
+        var list=pool.filter(function(s){return (s.behavior||'default')==b;});
+        html+='<h3 class="sans" style="font-size:13px;letter-spacing:.06em;margin:22px 0 6px;color:var(--ink)">'+
+          (BNAMES[b]||b).toUpperCase()+'</h3>'+
+          '<div class="scroll"><table><tr><th>Advisor model</th>'+
+          '<th><span class="whatis" data-def="arm">Arm</span></th><th class="r">n</th>'+
+          '<th class="r"><span class="whatis" data-def="act">Acts</span></th>'+
+          '<th class="r"><span class="whatis" data-def="ask">Asks more</span></th>'+
+          '<th class="r"><span class="whatis" data-def="stepaway">Steps away</span></th>'+
+          '<th class="r"><span class="whatis" data-def="intent">Intent: this week</span></th>'+
+          '<th class="r"><span class="whatis" data-def="uncited">Uncited uptake</span></th>'+
+          '<th class="r"><span class="whatis" data-def="trust">Trust up</span></th></tr>'+rows(list)+'</table></div>';
+      });
+      var out2=document.getElementById('simout');
+      out2.style.border='none'; out2.style.padding='0'; out2.style.color='inherit'; out2.innerHTML=html;
+    };
+    window.renderSims();
   }
   /* sub-need margins, bands, judged compare, gate items */
   if(D.subneeds){
