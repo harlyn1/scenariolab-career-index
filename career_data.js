@@ -145,140 +145,200 @@ window.CI_DATA={
    "n": 108,
    "gf": 96.2,
    "cf": 0.0,
-   "margin": 96.2
+   "margin": 96.2,
+   "lk": null,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Career discovery",
    "n": 108,
    "gf": 80.0,
    "cf": 0.0,
-   "margin": 80.0
+   "margin": 80.0,
+   "lk": 62,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Certification & licensure",
    "n": 108,
    "gf": 71.0,
    "cf": 0.0,
-   "margin": 71.0
+   "margin": 71.0,
+   "lk": null,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Dual enrollment & CTE planning",
    "n": 108,
    "gf": 79.7,
    "cf": 0.0,
-   "margin": 79.7
+   "margin": 79.7,
+   "lk": 57,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Entrepreneurship & self-employment",
    "n": 108,
    "gf": 0.0,
    "cf": 0.0,
-   "margin": 0.0
+   "margin": 0.0,
+   "lk": null,
+   "bg": 93,
+   "gate": 76.9
   },
   {
    "use_case": "Financial aid & pathway ROI",
    "n": 108,
    "gf": 15.2,
    "cf": 0.0,
-   "margin": 15.2
+   "margin": 15.2,
+   "lk": null,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Gap year & re-engagement",
    "n": 108,
    "gf": null,
    "cf": null,
-   "margin": null
+   "margin": null,
+   "lk": 63,
+   "bg": 87,
+   "gate": 75.0
   },
   {
    "use_case": "Internships & work-based learning",
    "n": 108,
    "gf": 19.0,
    "cf": 0.0,
-   "margin": 19.0
+   "margin": 19.0,
+   "lk": 54,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Interview prep",
    "n": 108,
    "gf": 0.0,
    "cf": 0.0,
-   "margin": 0.0
+   "margin": 0.0,
+   "lk": 55,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Job search strategy",
    "n": 108,
    "gf": 40.0,
    "cf": 0.0,
-   "margin": 40.0
+   "margin": 40.0,
+   "lk": null,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Layoff response",
    "n": 108,
    "gf": 71.2,
    "cf": 0.0,
-   "margin": 71.2
+   "margin": 71.2,
+   "lk": null,
+   "bg": 87,
+   "gate": 76.9
   },
   {
    "use_case": "Major selection",
    "n": 107,
    "gf": 60.0,
    "cf": 0.0,
-   "margin": 60.0
+   "margin": 60.0,
+   "lk": 62,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Mid-career pivot",
    "n": 108,
    "gf": 16.3,
    "cf": 0.0,
-   "margin": 16.3
+   "margin": 16.3,
+   "lk": null,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Military & service pathways",
    "n": 108,
    "gf": 75.0,
    "cf": 0.0,
-   "margin": 75.0
+   "margin": 75.0,
+   "lk": null,
+   "bg": 92,
+   "gate": 82.4
   },
   {
    "use_case": "Negotiation",
    "n": 108,
    "gf": 16.2,
    "cf": 0.0,
-   "margin": 16.2
+   "margin": 16.2,
+   "lk": null,
+   "bg": 87,
+   "gate": 71.3
   },
   {
    "use_case": "Networking",
    "n": 108,
    "gf": null,
    "cf": null,
-   "margin": null
+   "margin": null,
+   "lk": 54,
+   "bg": 83,
+   "gate": 68.5
   },
   {
    "use_case": "Promotion planning",
    "n": 108,
    "gf": 68.3,
    "cf": 0.0,
-   "margin": 68.3
+   "margin": 68.3,
+   "lk": null,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Resume & portfolio",
    "n": 108,
    "gf": 0.0,
    "cf": 0.0,
-   "margin": 0.0
+   "margin": 0.0,
+   "lk": 62,
+   "bg": null,
+   "gate": null
   },
   {
    "use_case": "Returnship",
    "n": 108,
    "gf": 36.0,
    "cf": 0.0,
-   "margin": 36.0
+   "margin": 36.0,
+   "lk": null,
+   "bg": 87,
+   "gate": 74.1
   },
   {
    "use_case": "Transferable skills",
    "n": 108,
    "gf": 0.0,
    "cf": 0.0,
-   "margin": 0.0
+   "margin": 0.0,
+   "lk": 53,
+   "bg": null,
+   "gate": null
   }
  ],
  "sims": [

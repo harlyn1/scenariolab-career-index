@@ -1010,7 +1010,11 @@ function renderUC(){
   if(window.CI_DATA && CI_DATA.use_cases){
     rows.forEach(function(r){
       var L=CI_DATA.use_cases.find(function(x){return x.use_case==r.uc});
-      if(L && L.margin!=null){ r.gf=L.gf; r.cf=L.cf; r.margin=L.margin; r.live=true; }
+      if(!L) return;
+      if(L.margin!=null){ r.gf=L.gf; r.cf=L.cf; r.margin=L.margin; r.live=true; }
+      if(L.lk!=null){ r.lk=L.lk; r.live=true; }
+      if(L.bg!=null){ r.bg=L.bg; r.live=true; }
+      if(L.gate!=null){ r.gate=L.gate; r.live=true; }
     });
   }
   rows.sort(function(a,b){ return (b.margin||0)-(a.margin||0); });
