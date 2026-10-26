@@ -341,6 +341,177 @@ window.CI_DATA={
    "gate": null
   }
  ],
+ "subneeds": [
+  {
+   "name": "Interests matched to options",
+   "tier": "B",
+   "n": 539,
+   "gf": 68.1,
+   "cf": 0.0,
+   "margin": 68.1,
+   "lk_g": 59,
+   "lk_c": 48,
+   "bg": 85,
+   "act": 62
+  },
+  {
+   "name": "Wages & job demand",
+   "tier": "A",
+   "n": 432,
+   "gf": 49.8,
+   "cf": 0.0,
+   "margin": 49.8,
+   "lk_g": 62,
+   "lk_c": 49,
+   "bg": 87,
+   "act": 65
+  },
+  {
+   "name": "Program outcomes & earnings",
+   "tier": "A",
+   "n": 323,
+   "gf": 28.3,
+   "cf": 0.0,
+   "margin": 28.3,
+   "lk_g": 62,
+   "lk_c": 46,
+   "bg": null,
+   "act": 65
+  },
+  {
+   "name": "Program structure & requirements",
+   "tier": "A",
+   "n": 324,
+   "gf": 79.4,
+   "cf": 0.0,
+   "margin": 79.4,
+   "lk_g": 57,
+   "lk_c": 44,
+   "bg": null,
+   "act": 66
+  },
+  {
+   "name": "Academic history",
+   "tier": "B",
+   "n": 432,
+   "gf": 54.9,
+   "cf": 0.0,
+   "margin": 54.9,
+   "lk_g": 56,
+   "lk_c": 52,
+   "bg": null,
+   "act": 62
+  },
+  {
+   "name": "Local training & apprenticeships",
+   "tier": "A",
+   "n": 756,
+   "gf": 64.7,
+   "cf": 0.0,
+   "margin": 64.7,
+   "lk_g": 54,
+   "lk_c": 48,
+   "bg": 89,
+   "act": 65
+  },
+  {
+   "name": "Belonging & inclusion",
+   "tier": "C",
+   "n": 432,
+   "gf": 51.2,
+   "cf": 0.0,
+   "margin": 51.2,
+   "lk_g": 59,
+   "lk_c": 46,
+   "bg": 87,
+   "act": 65
+  },
+  {
+   "name": "Skills-to-credential links",
+   "tier": "A",
+   "n": 648,
+   "gf": 35.0,
+   "cf": 0.0,
+   "margin": 35.0,
+   "lk_g": 56,
+   "lk_c": 56,
+   "bg": 93,
+   "act": 61
+  },
+  {
+   "name": "Quality of life",
+   "tier": "C",
+   "n": 324,
+   "gf": 41.4,
+   "cf": 0.0,
+   "margin": 41.4,
+   "lk_g": null,
+   "lk_c": null,
+   "bg": 89,
+   "act": 66
+  },
+  {
+   "name": "Degree program options",
+   "tier": "A",
+   "n": 108,
+   "gf": 15.2,
+   "cf": 0.0,
+   "margin": 15.2,
+   "lk_g": null,
+   "lk_c": null,
+   "bg": null,
+   "act": 69
+  }
+ ],
+ "bands": [
+  {
+   "band": "rich",
+   "n": 720,
+   "gf": 52.0,
+   "cf": 0.0,
+   "margin": 52.0
+  },
+  {
+   "band": "mid",
+   "n": 720,
+   "gf": 55.0,
+   "cf": 0.0,
+   "margin": 55.0
+  },
+  {
+   "band": "thin",
+   "n": 719,
+   "gf": 59.6,
+   "cf": 0.0,
+   "margin": 59.6
+  }
+ ],
+ "gate_items": [
+  {
+   "item": "steering",
+   "fails": 10,
+   "pass": 98.7
+  },
+  {
+   "item": "screening",
+   "fails": 12,
+   "pass": 98.4
+  },
+  {
+   "item": "invented",
+   "fails": 27,
+   "pass": 96.4
+  },
+  {
+   "item": "discouragement",
+   "fails": 8,
+   "pass": 98.9
+  }
+ ],
+ "gate_meta": {
+  "n_gated": 756,
+  "n_fails": 40
+ },
  "sims": [
   {
    "behavior": "anxious_avoidant",
