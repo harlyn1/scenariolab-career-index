@@ -51,6 +51,28 @@
   .pend{color:var(--mute);font-style:italic;font-size:12px}
   .pendbox{border:1px dashed var(--line);padding:16px 18px;color:var(--mute);
     font-family:Helvetica,Arial,sans-serif;font-size:13px;margin-top:14px}
+  .cmpbtn{display:inline-block;font-family:Helvetica,Arial,sans-serif;font-size:10.5px;
+    font-weight:bold;letter-spacing:.04em;color:var(--bar);border:1px solid var(--barsoft);
+    background:var(--barsoft);padding:1px 7px;margin-top:4px;cursor:pointer;text-decoration:none}
+  .cmpbtn:hover{background:var(--bar);color:#fff}
+  tr.cmprow>td{background:#F5F3EC;border-bottom:2px solid var(--ink);padding:16px 14px}
+  .cmpgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:980px){.cmpgrid{grid-template-columns:1fr}}
+  .cmpcard{background:var(--paper);border:1px solid var(--line);padding:11px 13px;
+    font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.5;color:var(--ink2)}
+  .cmpcard .hd{font-weight:bold;color:var(--ink);margin-bottom:5px}
+  .cmpcard .ans{max-height:150px;overflow-y:auto;border-left:2px solid var(--barsoft);
+    padding-left:9px;margin:6px 0;white-space:pre-wrap}
+  .cmpcard .ft{font-size:11px;color:var(--mute);border-top:1px solid var(--line);
+    padding-top:5px;margin-top:6px}
+  .cmpctx{font-family:Helvetica,Arial,sans-serif;font-size:12px;color:var(--mute);margin:0 0 12px}
+  .uexam{font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.55;color:var(--ink2)}
+  .uexam .lab{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+  .uexam .blk{background:var(--paper);border:1px solid var(--line);padding:9px 12px;margin:6px 0;white-space:pre-wrap}
+  #simctl select{font-family:Helvetica,Arial,sans-serif;font-size:12px;border:1px solid var(--line);
+    background:var(--paper);color:var(--ink);padding:3px 6px}
+  tr.simx{cursor:pointer}
+  tr.simx:hover>td{background:#F5F3EC}
   .mchip{display:inline-block;width:16px;height:16px;border-radius:50%;color:#fff;
     font-family:Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;text-align:center;
     line-height:16px;margin-right:6px;vertical-align:-2px;letter-spacing:0}
@@ -297,10 +319,29 @@ student, it does not work.</p>
 </table>
 
 <h2><span class="no">4</span>Simulation outputs <span id="simlive"></span></h2>
-<div class="seg sans" id="simseg" style="display:none;margin:4px 0 12px">
+<div class="seg sans" id="simseg" style="display:none;margin:4px 0 10px">
   <button id="simseg-all" class="on" onclick="setSimTrack('')">All tracks</button>
   <button id="simseg-hs" onclick="setSimTrack('hs')">High school</button>
   <button id="simseg-ca" onclick="setSimTrack('ca')">College / adult</button>
+</div>
+<div id="simctl" class="sans" style="display:none;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 14px;font-size:12px;color:var(--mute)">
+  <span>Sort rows</span>
+  <select id="sim-sort" onchange="renderSims()">
+    <option value="">table order</option><option value="act">Acts</option>
+    <option value="ask_more">Asks more</option><option value="step_away">Steps away</option>
+    <option value="intent_this_week">Intent: this week</option>
+    <option value="uncited_uptake">Uncited uptake</option><option value="trust_up">Trust up</option>
+  </select>
+  <select id="sim-dir" onchange="renderSims()">
+    <option value="desc">high to low</option><option value="asc">low to high</option>
+  </select>
+  <span>Arm</span>
+  <select id="sim-arm" onchange="renderSims()">
+    <option value="">both</option><option value="grounded">grounded</option><option value="control">control</option>
+  </select>
+  <span>Model</span>
+  <select id="sim-model" onchange="renderSims()"><option value="">all</option></select>
+  <span style="font-size:11px">&middot; click any row for the real conversation behind it</span>
 </div>
 <div id="simout" class="sans" style="border:1px dashed var(--line);padding:18px;color:var(--mute);font-size:13px">
 Waiting for results. Run the kit, then copy <span class="num">career_data.js</span> next to this
@@ -779,6 +820,7 @@ fill when the scorer logs failures by item.</p>
 
 </div>
 <script src="career_data.js?r=2160"></script>
+<script src="career_examples.js?r=1"></script>
 <script>
 function showTab(which){
   ['res','flow','tiers','grid','hitl','sim'].forEach(function(t){
@@ -806,6 +848,61 @@ function setSimTrack(t){
     if(b) b.className=((k=='all'&&t=='')||(k==t))?'on':'';
   });
   if(window.renderSims) window.renderSims();
+}
+
+/* ---------- real-transcript comparisons (career_examples.js) ---------- */
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toggleUCcmp(ev,uc){
+  ev.stopPropagation(); ev.preventDefault();
+  var tr=ev.target.closest('tr'); if(!tr) return;
+  var nxt=tr.nextElementSibling;
+  if(nxt && nxt.className=='cmprow'){ nxt.parentNode.removeChild(nxt); return; }
+  var ex=window.CI_EX && CI_EX.results && CI_EX.results[uc];
+  var det=document.createElement('tr'); det.className='cmprow';
+  var cols=tr.cells.length;
+  if(!ex){ det.innerHTML='<td colspan="'+cols+'"><span class="pend">No stored transcripts for this use case yet.</span></td>';
+    tr.parentNode.insertBefore(det,tr.nextSibling); return; }
+  var order=(window.CI_DATA&&CI_DATA.models)?CI_DATA.models.slice()
+    .sort(function(a,b){return (b.facts_grounded||0)-(a.facts_grounded||0);})
+    .map(function(m){return m.model;}):Object.keys(ex);
+  var any=ex[order.find(function(m){return ex[m];})]||{};
+  var cards=order.filter(function(m){return ex[m];}).map(function(m){
+    var e=ex[m];
+    return '<div class="cmpcard"><div class="hd">'+mlogo(m)+esc(m)+'</div>'+
+      '<div style="font-style:italic;color:var(--mute)">asked: &ldquo;'+esc(e.q.slice(0,130))+(e.q.length>130?'&hellip;':'')+'&rdquo;</div>'+
+      '<div class="ans">'+esc(e.a)+'</div>'+
+      '<div class="ft">'+esc(e.facts||'')+
+      (e.lk?' &middot; linkage '+e.lk+'/5':'')+(e.act?' &middot; next step '+e.act+'/5':'')+'</div></div>';
+  }).join('');
+  det.innerHTML='<td colspan="'+cols+'"><p class="cmpctx"><b>Real first answers, side by side.</b> '+
+    'Same scenario (cell '+esc(any.cell)+', student '+esc(any.persona)+', grounded arm): each model advised '+
+    'the same simulated student. Wording of the opening varies because the student is simulated per '+
+    'conversation. Scores are for this one conversation, from evals.jsonl.</p>'+
+    '<div class="cmpgrid">'+cards+'</div></td>';
+  tr.parentNode.insertBefore(det,tr.nextSibling);
+}
+function toggleSimEx(tr,key){
+  var nxt=tr.nextElementSibling;
+  if(nxt && nxt.className=='cmprow'){ nxt.parentNode.removeChild(nxt); return; }
+  var e=window.CI_EX && CI_EX.sims && CI_EX.sims[key];
+  var det=document.createElement('tr'); det.className='cmprow';
+  var cols=tr.cells.length;
+  if(!e){ det.innerHTML='<td colspan="'+cols+'"><span class="pend">No stored example for this row.</span></td>';
+    tr.parentNode.insertBefore(det,tr.nextSibling); return; }
+  var u=e.u||{};
+  det.innerHTML='<td colspan="'+cols+'"><div class="uexam">'+
+    '<p class="cmpctx"><b>The real conversation behind this row.</b> '+esc(e.use_case)+' &middot; student '+
+    esc(e.persona)+' &middot; cell '+esc(e.cell)+'. The same scenario anchors every row in this table, '+
+    'so open two rows to compare models or arms at the same juncture.</p>'+
+    '<div class="lab">Student opened</div><div class="blk">'+esc(e.q)+'</div>'+
+    '<div class="lab">Advisor\'s final answer</div><div class="blk">'+esc(e.a)+'</div>'+
+    '<div class="lab">The student\'s internal update (what the simulation scores)</div>'+
+    '<div class="blk">belief: &ldquo;'+esc(u.belief_before)+'&rdquo; &rarr; &ldquo;'+esc(u.belief_after)+'&rdquo; '+
+    '['+esc(u.belief_source)+']<br>trust: '+esc(u.trust)+' &middot; '+esc(u.trust_reason)+
+    '<br>intent: '+esc(u.intent)+' ('+esc(u.intent_when)+')'+
+    '<br>choice: <b>'+esc(u.choice)+'</b> &middot; '+esc(u.choice_reason)+'</div></div></td>';
+  tr.parentNode.insertBefore(det,tr.nextSibling);
 }
 
 /* ---------- what-is popups on column titles ---------- */
@@ -1061,7 +1158,10 @@ function renderUC(){
     return '<tr style="cursor:pointer" onclick="pickUC(\''+r.uc.replace(/'/g,"\\'")+'\')">'+
       '<td><b>'+r.uc+'</b>'+(r.live?' <span class="flag ok">LIVE</span>':'')+
       '<br><span style="color:var(--mute);font-size:11px">'+
-      (r.track=='hs'?'HS track':'college / adult')+' &middot; 3 cells</span></td>'+
+      (r.track=='hs'?'HS track':'college / adult')+' &middot; 3 cells</span>'+
+      (window.CI_EX&&CI_EX.results&&CI_EX.results[r.uc]?
+        '<br><a class="cmpbtn" href="#" onclick="toggleUCcmp(event,\''+r.uc.replace(/'/g,"\\'")+'\')">compare answers</a>':'')+
+      '</td>'+
       '<td class="r">'+f(r.gf,true)+'</td><td class="r">'+f(r.cf,true)+'</td>'+
       '<td>'+bar+'</td><td class="r">'+f(r.lk,false)+'</td><td class="r">'+f(r.bg,false)+'</td>'+
       '<td class="r">'+gate+'</td></tr>';
@@ -1119,8 +1219,18 @@ renderGrid(); renderUC(); coverage();
       anxious_avoidant:"Anxious-avoidant student",social_proof:"Social-proof student",default:"Default"};
     document.getElementById('simlive').innerHTML='<span class="flag ok">LIVE</span>';
     var seg=document.getElementById('simseg'); if(seg) seg.style.display='inline-flex';
+    var ctl=document.getElementById('simctl');
+    if(ctl){
+      ctl.style.display='inline-flex';
+      var msel=document.getElementById('sim-model');
+      var mods=[]; D.sims.forEach(function(s){if(mods.indexOf(s.model)<0)mods.push(s.model);});
+      mods.sort().forEach(function(m){var o=document.createElement('option');o.textContent=m;msel.appendChild(o);});
+    }
     function rows(list){
-      return list.map(function(s){return '<tr><td class="model">'+mlogo(s.model)+s.model+'</td><td>'+s.arm+'</td>'+
+      return list.map(function(s){
+        var key=(s.behavior||'default')+'|'+s.model+'|'+s.arm;
+        return '<tr class="simx" onclick="toggleSimEx(this,\''+key.replace(/'/g,"\\'")+'\')">'+
+        '<td class="model">'+mlogo(s.model)+s.model+'</td><td>'+s.arm+'</td>'+
         '<td class="r num">'+s.n+'</td><td class="r num">'+s.act+'%</td><td class="r num">'+s.ask_more+'%</td>'+
         '<td class="r num">'+s.step_away+'%</td><td class="r num">'+s.intent_this_week+'%</td>'+
         '<td class="r num"'+(s.uncited_uptake>8?' style="color:var(--red);font-weight:bold"':'')+'>'+s.uncited_uptake+'%</td>'+
@@ -1128,7 +1238,15 @@ renderGrid(); renderUC(); coverage();
     }
     window.renderSims=function(){
       var out=document.getElementById('simout');
-      var pool=D.sims.filter(function(s){return !window.SIMTRACK || (s.track||'hs')==window.SIMTRACK;});
+      var fArm=(document.getElementById('sim-arm')||{}).value||'';
+      var fMod=(document.getElementById('sim-model')||{}).value||'';
+      var srt=(document.getElementById('sim-sort')||{}).value||'';
+      var dir=((document.getElementById('sim-dir')||{}).value||'desc')=='asc'?1:-1;
+      var pool=D.sims.filter(function(s){
+        return (!window.SIMTRACK || (s.track||'hs')==window.SIMTRACK)
+          && (!fArm || s.arm==fArm) && (!fMod || s.model==fMod);
+      });
+      if(srt) pool=pool.slice().sort(function(a,b){return dir*((a[srt]||0)-(b[srt]||0));});
       if(!pool.length){
         out.style.border='1px dashed var(--line)'; out.style.padding='18px';
         out.style.color='var(--mute)'; out.style.fontSize='13px';
