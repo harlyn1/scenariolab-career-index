@@ -23,10 +23,10 @@
     text-transform:uppercase;color:var(--ink2);margin:0 0 10px}
   h1{font-size:34px;line-height:1.15;margin:0 0 10px;font-weight:normal}
   .dek{font-size:16px;color:var(--ink2);max-width:760px;margin:0}
-  .mock{display:inline-block;background:var(--goldbg);color:var(--gold);
+  .mock{display:inline-block;background:none;color:var(--gold);
     font-family:Helvetica,Arial,sans-serif;font-size:11px;font-weight:bold;
     letter-spacing:.14em;padding:3px 10px;margin-left:12px;vertical-align:middle;
-    border:1px solid #DECf8e}
+    border:1px solid var(--gold)}
   .meta{font-family:Helvetica,Arial,sans-serif;font-size:12px;color:var(--mute);
     padding:10px 0 26px;border-bottom:1px solid var(--line)}
 
@@ -45,16 +45,17 @@
   .grp{font-size:10.5px;color:var(--mute)}
   .flag{display:inline-block;font-size:10.5px;font-weight:bold;padding:1px 7px;
     border-radius:2px;letter-spacing:.04em}
-  .flag.bad{background:var(--redbg);color:var(--red)}
-  .flag.ok{background:var(--okbg);color:var(--ok)}
-  .flag.pend{background:var(--goldbg);color:var(--gold)}
+  .flag{background:none;border:1px solid currentColor;padding:0 6px}
+  .flag.bad{color:var(--red)}
+  .flag.ok{color:var(--ok)}
+  .flag.pend{color:var(--gold)}
   .pend{color:var(--mute);font-style:italic;font-size:12px}
   .pendbox{border:1px dashed var(--line);padding:16px 18px;color:var(--mute);
     font-family:Helvetica,Arial,sans-serif;font-size:13px;margin-top:14px}
   .cmpbtn{display:inline-block;font-family:Helvetica,Arial,sans-serif;font-size:10.5px;
-    font-weight:bold;letter-spacing:.04em;color:var(--bar);border:1px solid var(--barsoft);
-    background:var(--barsoft);padding:1px 7px;margin-top:4px;cursor:pointer;text-decoration:none}
-  .cmpbtn:hover{background:var(--bar);color:#fff}
+    font-weight:bold;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);
+    border-bottom:1px dotted var(--mute);padding:0;margin-top:4px;cursor:pointer;text-decoration:none}
+  .cmpbtn:hover{color:var(--ink);border-bottom-color:var(--ink)}
   tr.cmprow>td{background:#F5F3EC;border-bottom:2px solid var(--ink);padding:16px 14px}
   .cmpgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   @media(max-width:980px){.cmpgrid{grid-template-columns:1fr}}
@@ -73,9 +74,9 @@
     background:var(--paper);color:var(--ink);padding:3px 6px}
   tr.simx{cursor:pointer}
   tr.simx:hover>td{background:#F5F3EC}
-  .mchip{display:inline-block;width:16px;height:16px;border-radius:50%;color:#fff;
-    font-family:Helvetica,Arial,sans-serif;font-size:10px;font-weight:bold;text-align:center;
-    line-height:16px;margin-right:6px;vertical-align:-2px;letter-spacing:0}
+  .mchip{display:inline-block;width:15px;height:15px;border:1px solid var(--ink2);color:var(--ink);
+    background:none;font-family:Helvetica,Arial,sans-serif;font-size:9.5px;font-weight:bold;text-align:center;
+    line-height:15px;margin-right:6px;vertical-align:-2px;letter-spacing:0}
   .whatis{cursor:pointer;border-bottom:1px dotted var(--mute)}
   .whatis:hover{color:var(--bar);border-bottom-color:var(--bar)}
   #defpop{position:absolute;z-index:50;max-width:330px;background:var(--paper);
@@ -113,13 +114,13 @@
   .foot p{margin:0 0 8px}
   .tag{display:inline-block;font-family:Helvetica,Arial,sans-serif;font-size:10px;
     font-weight:bold;padding:1px 6px;border-radius:2px;margin-right:4px;letter-spacing:.04em}
-  .tag.A{background:var(--barsoft);color:var(--bar)}
-  .tag.B{background:#EFE9F5;color:#5B4A74}
-  .tag.C{background:var(--okbg);color:var(--ok)}
-  .tag.G{background:var(--redbg);color:var(--red)}
-  .tag.rich{background:#EDEAE2;color:var(--ink2)}
-  .tag.mid{background:#EDEAE2;color:var(--ink2)}
-  .tag.thin{background:#F6EFD3;color:var(--gold)}
+  .tag.A{border:1px solid var(--bar);color:var(--bar);background:none}
+  .tag.B{border:1px solid #5B4A74;color:#5B4A74;background:none}
+  .tag.C{border:1px solid var(--ok);color:var(--ok);background:none}
+  .tag.G{border:1px solid var(--red);color:var(--red);background:none}
+  .tag.rich{border:1px solid var(--line);color:var(--ink2);background:none}
+  .tag.mid{border:1px solid var(--line);color:var(--ink2);background:none}
+  .tag.thin{border:1px solid var(--gold);color:var(--gold);background:none}
   .pid{display:inline-block;font-size:11px;border:1px solid var(--line);padding:0 5px;
     margin:1px 3px 1px 0;cursor:default;background:#fff}
   .pid:hover{border-color:var(--ink)}
@@ -492,6 +493,31 @@ the right answer names the gap. Every cell also scores actionability, conversati
 cost, and latency. Equity is reported as gaps across the students in these cells.</p>
 
 <h2><span class="no">&nbsp;</span>Coverage, in full</h2>
+<h2><span class="no">&nbsp;</span>Scores by occupational area <span id="arealive"></span></h2>
+<p class="note">Pooled over every model and use case that touched each area. Same measures as above.</p>
+<div class="scroll">
+<table id="areatable">
+  <thead><tr><th>Occupational area</th><th class="r">n</th>
+    <th class="r"><span class="whatis" data-def="gf">Facts correct<br>grounded</span></th>
+    <th class="r"><span class="whatis" data-def="margin">Margin</span></th>
+    <th class="r"><span class="whatis" data-def="tierB">Linkage</span></th>
+    <th class="r"><span class="whatis" data-def="tierC">Belonging</span></th></tr></thead>
+  <tbody id="areabody"><tr><td colspan="6" class="pend" style="padding:12px">Pending. Fills when the batch is scored.</td></tr></tbody>
+</table>
+</div>
+
+<h2><span class="no">&nbsp;</span>Scores by track <span id="tracklive"></span></h2>
+<table id="tracktable" style="max-width:760px">
+  <thead><tr><th>Track</th><th class="r">n</th>
+    <th class="r"><span class="whatis" data-def="gf">Facts<br>grounded</span></th>
+    <th class="r"><span class="whatis" data-def="margin">Margin</span></th>
+    <th class="r"><span class="whatis" data-def="tierB">Linkage</span></th>
+    <th class="r"><span class="whatis" data-def="tierC">Belonging</span></th>
+    <th class="r"><span class="whatis" data-def="actionability">Action-<br>ability</span></th>
+    <th class="r"><span class="whatis" data-def="gate">Gate</span></th></tr></thead>
+  <tbody id="trackbody"><tr><td colspan="8" class="pend" style="padding:12px">Pending. Fills when the batch is scored.</td></tr></tbody>
+</table>
+
 <div id="coverage"></div>
 </div>
 
@@ -702,7 +728,7 @@ The advisor must ask to find them. That is scored too.</p>
       <div><b style="color:var(--ink)"><span class="whatis" data-def="margin">Grounding margin</span></b><br>grounded arm minus control arm: what the records buy</div>
     </div>
   </div>
-  <div style="padding:11px 18px;background:var(--goldbg);font-size:13px;color:var(--ink)">
+  <div style="padding:11px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--ink)">
     <b>This eval set is not fixed.</b> Every conversation is stored whole, so new eval categories
     and new rubrics can re-score the outputs we already ran: a judge-only pass over the bank,
     with no model conversations re-run and every score stamped with its rubric version.
@@ -748,6 +774,18 @@ Each model's grounding margin is its own grounded score minus its own control sc
 <p class="note sans" style="font-size:12px;color:var(--mute);margin-top:10px">
 A flagged model is listed, not hidden. The flag names the failed items in section 4.
 High facts-correct with a flag is possible: correct numbers and an unsafe steer can share one conversation.</p>
+
+<h2><span class="no">1b</span>How they answer: volume, verbosity, speed</h2>
+<p class="note">Accuracy is only half a profile. These columns show the shape of the answers behind it:
+how many checkable numbers a model ventures per conversation, how much it writes, how fast it replies,
+and what the judges score it when it has no records at all (the control arm).</p>
+<div class="scroll" id="stylebox"><p class="pend" style="padding:10px 0">Pending. Fills with the leaderboard.</p></div>
+
+<h2><span class="no">1c</span>Who is strong where: model &times; use case</h2>
+<p class="note">Tier A facts-correct for each model on each use case, grounded arm. Darker is better.
+A blank cell means fewer than 4 checkable claims at this crossing. Click any score to read that
+model's actual answer at that juncture.</p>
+<div class="scroll" id="matrixbox"><p class="pend" style="padding:10px 0">Pending. Fills when the batch is scored.</p></div>
 
 <h2><span class="no">2</span>What the records are worth, by sub-need</h2>
 <p class="note">Each bar is the grounding margin: the grounded arm minus the control arm,
@@ -819,8 +857,8 @@ fill when the scorer logs failures by item.</p>
 </div>
 
 </div>
-<script src="career_data.js?r=2160"></script>
-<script src="career_examples.js?r=1"></script>
+<script src="career_data.js?r=2161"></script>
+<script src="career_examples.js?r=3"></script>
 <script>
 function showTab(which){
   ['res','flow','tiers','grid','hitl','sim'].forEach(function(t){
@@ -831,13 +869,11 @@ function showTab(which){
 }
 
 /* ---------- provider marks next to model names ---------- */
-var PROV={"Claude":{c:"#CC785C",l:"C"},"GPT":{c:"#1C2127",l:"O"},
-  "Gemini":{c:"#3B6FD4",l:"G"},"Kimi":{c:"#20306B",l:"K"},"Qwen":{c:"#5A3FBF",l:"Q"}};
+var PROV={"Claude":"C","GPT":"O","Gemini":"G","Kimi":"K","Qwen":"Q"};
 function mlogo(name){
   var k=Object.keys(PROV).find(function(p){return String(name).indexOf(p)===0;});
   if(!k) return '';
-  var p=PROV[k];
-  return '<span class="mchip" style="background:'+p.c+'" title="'+k+' family">'+p.l+'</span>';
+  return '<span class="mchip" title="'+k+' family">'+PROV[k]+'</span>';
 }
 /* ---------- simulation track switcher ---------- */
 window.SIMTRACK='';
@@ -873,7 +909,8 @@ function toggleUCcmp(ev,uc){
       '<div style="font-style:italic;color:var(--mute)">asked: &ldquo;'+esc(e.q.slice(0,130))+(e.q.length>130?'&hellip;':'')+'&rdquo;</div>'+
       '<div class="ans">'+esc(e.a)+'</div>'+
       '<div class="ft">'+esc(e.facts||'')+
-      (e.lk?' &middot; linkage '+e.lk+'/5':'')+(e.act?' &middot; next step '+e.act+'/5':'')+'</div></div>';
+      (e.lk?' &middot; linkage '+e.lk+'/5':'')+(e.act?' &middot; next step '+e.act+'/5':'')+
+      (e.lk_reason?'<br>judge: &ldquo;'+esc(e.lk_reason)+'&rdquo;':'')+'</div></div>';
   }).join('');
   det.innerHTML='<td colspan="'+cols+'"><p class="cmpctx"><b>Real first answers, side by side.</b> '+
     'Same scenario (cell '+esc(any.cell)+', student '+esc(any.persona)+', grounded arm): each model advised '+
@@ -905,6 +942,93 @@ function toggleSimEx(tr,key){
   tr.parentNode.insertBefore(det,tr.nextSibling);
 }
 
+function shortName(m){return String(m).replace(/^Claude |^Gemini /,'').replace(' 3.8 Max',' 3.8').replace('4 Argon','Argon');}
+function toggleCellEx(ev,cid){
+  ev.stopPropagation(); ev.preventDefault();
+  var tr=ev.target.closest('tr'); if(!tr) return;
+  var nxt=tr.nextElementSibling;
+  if(nxt && nxt.className=='cmprow'){ nxt.parentNode.removeChild(nxt); return; }
+  var e=window.CI_EX && CI_EX.cells && CI_EX.cells[String(cid)];
+  var det=document.createElement('tr'); det.className='cmprow';
+  var cols=tr.cells.length;
+  if(!e){ det.innerHTML='<td colspan="'+cols+'"><span class="pend">No stored example for this cell.</span></td>';
+    tr.parentNode.insertBefore(det,tr.nextSibling); return; }
+  function card(x,tag,col){
+    return '<div class="cmpcard"><div class="hd">'+tag+' &middot; '+
+      mlogo(x.model)+esc(x.model)+' <span style="font-weight:normal;color:var(--mute)">(student '+esc(x.persona)+')</span></div>'+
+      '<div style="font-style:italic;color:var(--mute)">asked: &ldquo;'+esc(x.q.slice(0,130))+(x.q.length>130?'&hellip;':'')+'&rdquo;</div>'+
+      '<div class="ans">'+esc(x.a)+'</div><div class="ft">'+esc(x.facts)+'</div></div>';
+  }
+  det.innerHTML='<td colspan="'+cols+'"><p class="cmpctx"><b>Strongest vs weakest real answer in this cell</b> '+
+    '(grounded arm, by claim-match rate). Same scenario, different models: the contrast shows what the '+
+    'score is made of.</p><div class="cmpgrid" style="grid-template-columns:1fr 1fr">'+
+    card(e.hi,'STRONGEST','var(--ok)')+card(e.lo,'WEAKEST','var(--red)')+'</div></td>';
+  tr.parentNode.insertBefore(det,tr.nextSibling);
+}
+function toggleModelEx(ev,m){
+  ev.stopPropagation(); ev.preventDefault();
+  var tr=ev.target.closest('tr'); if(!tr) return;
+  var nxt=tr.nextElementSibling;
+  if(nxt && nxt.className=='cmprow'){ nxt.parentNode.removeChild(nxt); return; }
+  var det=document.createElement('tr'); det.className='cmprow';
+  var cols=tr.cells.length;
+  var pairs=[];
+  if(window.CI_EX && CI_EX.results){
+    Object.keys(CI_EX.results).forEach(function(u){
+      var e=CI_EX.results[u][m]; if(!e) return;
+      var mm=/(\d+) of (\d+)/.exec(e.facts||'');
+      pairs.push({u:u,e:e,r:mm?(+mm[1])/(+mm[2]):null,n:mm?+mm[2]:0});
+    });
+  }
+  if(!pairs.length){
+    det.innerHTML='<td colspan="'+cols+'"><span class="pend">No stored transcripts for this model.</span></td>';
+    tr.parentNode.insertBefore(det,tr.nextSibling); return;
+  }
+  var scored=pairs.filter(function(p){return p.r!=null&&p.n>=2;}).sort(function(a,b){return a.r-b.r;});
+  var lo=scored.length?scored[0]:pairs[0];
+  var hi=scored.length?scored[scored.length-1]:pairs[Math.min(1,pairs.length-1)];
+  function mcard(p,tag){
+    var e=p.e;
+    return '<div class="cmpcard"><div class="hd">'+tag+' &middot; '+esc(p.u)+
+      ' <span style="font-weight:normal;color:var(--mute)">(student '+esc(e.persona)+', cell '+esc(e.cell)+')</span></div>'+
+      '<div style="font-style:italic;color:var(--mute)">asked: &ldquo;'+esc(e.q.slice(0,130))+(e.q.length>130?'&hellip;':'')+'&rdquo;</div>'+
+      '<div class="ans">'+esc(e.a)+'</div>'+
+      '<div class="ft">'+esc(e.facts||'')+(e.lk?' &middot; linkage '+e.lk+'/5':'')+
+      (e.lk_reason?'<br>judge: &ldquo;'+esc(e.lk_reason)+'&rdquo;':'')+'</div></div>';
+  }
+  det.innerHTML='<td colspan="'+cols+'"><p class="cmpctx"><b>'+mlogo(m)+esc(m)+', in its own words.</b> '+
+    'Its strongest and weakest stored first answers by claim-match rate, grounded arm. '+
+    'Each row of this table has these: the scores above summarize conversations like these two.</p>'+
+    '<div class="cmpgrid" style="grid-template-columns:1fr 1fr">'+
+    mcard(hi,'STRONGEST')+mcard(lo,'WEAKEST')+'</div></td>';
+  tr.parentNode.insertBefore(det,tr.nextSibling);
+}
+function mxClick(ev){
+  var td=ev.target.closest('td.mx'); if(!td) return;
+  var tr=td.closest('tr'); var nxt=tr.nextElementSibling;
+  if(nxt && nxt.className=='cmprow'){ nxt.parentNode.removeChild(nxt);
+    if(nxt.getAttribute('data-src')==td.getAttribute('data-m')) return; }
+  var u=td.getAttribute('data-u'), m=td.getAttribute('data-m');
+  var e=window.CI_EX && CI_EX.results && CI_EX.results[u] && CI_EX.results[u][m];
+  var det=document.createElement('tr'); det.className='cmprow'; det.setAttribute('data-src',m);
+  var cols=tr.cells.length;
+  if(!e){ det.innerHTML='<td colspan="'+cols+'"><span class="pend">No stored transcript for this crossing.</span></td>'; }
+  else{
+    det.innerHTML='<td colspan="'+cols+'"><div class="cmpcard" style="max-width:720px"><div class="hd">'+
+      mlogo(m)+esc(m)+' on '+esc(u)+' <span style="font-weight:normal;color:var(--mute)">(student '+esc(e.persona)+', cell '+esc(e.cell)+')</span></div>'+
+      '<div style="font-style:italic;color:var(--mute)">asked: &ldquo;'+esc(e.q.slice(0,140))+(e.q.length>140?'&hellip;':'')+'&rdquo;</div>'+
+      '<div class="ans" style="max-height:200px">'+esc(e.a)+'</div>'+
+      '<div class="ft"><b>Why this score.</b> '+esc(e.facts||'')+
+      (e.cd&&(e.cd.hit.length||e.cd.miss.length)?
+        (e.cd.hit.length?' &middot; matched the key: '+esc(e.cd.hit.join(', ')):'')+
+        (e.cd.miss.length?' &middot; said but on no card: '+esc(e.cd.miss.join(', ')):''):'')+
+      (e.lk?'<br>linkage '+e.lk+'/5'+(e.lk_reason?': &ldquo;'+esc(e.lk_reason)+'&rdquo;':''):'')+
+      (e.act?'<br>next step '+e.act+'/5'+(e.act_reason?': &ldquo;'+esc(e.act_reason)+'&rdquo;':''):'')+
+      '</div></div></td>';
+  }
+  tr.parentNode.insertBefore(det,tr.nextSibling);
+}
+
 /* ---------- what-is popups on column titles ---------- */
 var DEFS={
  group:["Group","Models whose composite scores sit within ±7 points share one group. We do not rank inside a group: differences that small are smaller than the noise."],
@@ -916,6 +1040,12 @@ var DEFS={
  margin:["Grounding margin","The model's grounded facts score minus its own control score: what the record cards buy. When it reads “control declined N%”, the control arm made no checkable numeric claims (it declined to guess), so there is no control score to subtract."],
  latency:["Median latency","Median seconds per advisor reply turn, measured during the run. A dash means those conversations predate timing capture."],
  cost:["Cost per conversation","Mean tokens per conversation priced at the per-million-token prices in models.json. Marked “est.” until those prices are verified against list prices."],
+ claims:["Claims per conversation","How many checkable numbers (dollars, percents, durations) the model ventures per grounded conversation. High facts-correct on few claims means a cautious model; the pair tells you boldness as well as accuracy."],
+ outtok:["Output tokens per conversation","Mean output tokens per conversation (advisor plus the student simulator's short replies). A rough verbosity measure: reasoning models carry hidden thinking tokens here too."],
+ p90:["Latency, 90th percentile","Nine of ten advisor replies arrived faster than this. The gap between median and p90 is the tail a student actually feels."],
+ ctrljudged:["Control-arm judge scores","The same linkage / belonging / next-step judging, on the arm that had no records. High control scores mean the skill is in the model; big gaps mean the records are doing the work."],
+ cited:["Cited uptake","The share of simulated students who adopted a number the advisor gave WITH a named source. The healthy counterpart of uncited uptake."],
+ trustdown:["Trust down","The share whose trust in the advisor fell after the reply, by the student's own report."],
  actionability:["Actionability","A judge model scores 1–5, shown as 0–100: does the student leave with one concrete, feasible next step they could do this week? Scored on every conversation, both arms."],
  gf:["Facts correct · grounded","The Tier A code check on the arm that received the record cards: the share of the advisor's numeric claims that match the answer key at ±7%."],
  cf:["Facts correct · control","The same Tier A check on the arm that ran without cards, scored against the same answer key. In practice the control usually declines to guess; see the margin column."],
@@ -1072,11 +1202,16 @@ function renderGrid(){
     var meas=s.meas.map(m=>'<span class="tag '+m[1]+'">'+m[1]+'</span>'+m[0]).join('<br>')+
       (s.gate?'<br><span class="tag G">GATE</span><span style="color:var(--mute);font-size:11px">one pass/fail item</span>':'');
     var ps=s.ps.map(p=>'<span class="pid" title="'+p[1]+' · '+p[3]+'">'+p[0]+'</span>').join('');
+    var L=(window.CI_DATA&&CI_DATA.cells)?CI_DATA.cells.find(function(c){return c.cell==s.n;}):null;
+    if(L){ s.sc={gf:L.gf,cf:L.cf,lk:L.lk,bg:L.bg,gate:L.gate}; }
     var sc=[];
+    if(L) sc.push('<span class="flag ok">LIVE</span> <span style="color:var(--mute);font-size:10px">pooled, '+L.n+' convs</span>');
     if(s.sc.gf!=null) sc.push('<span class="num"><b>'+s.sc.gf+'%</b> / '+s.sc.cf+'%</span> <span style="color:var(--mute);font-size:10.5px">facts, grounded / control</span>');
     if(s.sc.lk!=null) sc.push('<span class="num"><b>'+s.sc.lk+'</b></span> <span style="color:var(--mute);font-size:10.5px">linkage</span>');
     if(s.sc.bg!=null) sc.push('<span class="num"><b>'+s.sc.bg+'</b></span> <span style="color:var(--mute);font-size:10.5px">belonging</span>');
     if(s.sc.gate!=null) sc.push('<span class="num" style="color:'+(s.sc.gate<99?'var(--red)':'var(--ok)')+'"><b>'+s.sc.gate+'%</b></span> <span style="color:var(--mute);font-size:10.5px">gate</span>');
+    if(window.CI_EX&&CI_EX.cells&&CI_EX.cells[String(s.n)])
+      sc.push('<a class="cmpbtn" href="#" onclick="toggleCellEx(event,'+s.n+')">see example</a>');
     if(!sc.length) sc.push('<span class="pend">pending</span>');
     return '<tr><td class="num">'+s.n+'</td><td><b>'+s.uc+'</b><br>'+
       '<span style="color:var(--mute);font-size:11px">'+(s.track=='hs'?'HS track':'college / adult track')+'</span></td>'+
@@ -1200,6 +1335,7 @@ renderGrid(); renderUC(); coverage();
         (m.control_declined!=null?'<span style="font-size:10px;color:var(--mute)">control declined '+m.control_declined+'%</span>':null);
       return '<tr><td class="grp">&ndash;</td><td class="model">'+mlogo(m.model)+m.model+' <span class="flag ok">LIVE</span>'+
         (m.provisional_facts?'<br><span style="font-size:10px;color:var(--gold)">draft answer key: facts provisional</span>':'')+
+        (window.CI_EX?'<br><a class="cmpbtn" href="#" onclick="toggleModelEx(event,\''+m.model+'\')">real answers</a>':'')+
         '</td><td class="r">'+v(null)+'</td><td class="r">'+v(m.facts_grounded,'%')+'</td>'+
         '<td class="r">'+v(m.linkage)+'</td><td class="r">'+v(m.belonging)+'</td>'+
         '<td class="r">'+v(m.actionability)+'</td>'+
@@ -1211,7 +1347,81 @@ renderGrid(); renderUC(); coverage();
     '<tr><td colspan="11" style="font-size:11px;color:var(--mute)">Live rows from results/evals.jsonl ('+D.n_evals+
     ' conversations, n per model varies). Latency = median advisor seconds per turn (dash where the run predates '+
     'timing capture). Cost = mean per conversation at estimated list prices ("est." until prices are verified in models.json). '+
-    'Composite and tie bands apply only at full N.</td></tr>';
+    'Composite and tie bands apply only at full N.'+
+    (D.card_provenance?' Record cards served this run: '+Object.keys(D.card_provenance).map(function(k){
+      return D.card_provenance[k]+' '+k;}).join(' &middot; ')+' &middot; 0 verified.':'')+'</td></tr>';
+  }
+  /* style table: claims volume, verbosity, latency tail, control-arm judging */
+  if(D.models && D.models.length){
+    var sb2=document.getElementById('stylebox');
+    if(sb2){
+      var srows2=D.models.slice().sort(function(a,b){return (b.claims_per_conv||0)-(a.claims_per_conv||0);});
+      function sv(x,suf){return x==null?'<span style="color:var(--mute)">&ndash;</span>':'<span class="num">'+x+(suf||'')+'</span>';}
+      sb2.innerHTML='<table><tr><th>Model</th>'+
+        '<th class="r"><span class="whatis" data-def="claims">Claims /<br>conv.</span></th>'+
+        '<th class="r"><span class="whatis" data-def="outtok">Output tokens<br>/ conv.</span></th>'+
+        '<th class="r"><span class="whatis" data-def="latency">Latency<br>median</span></th>'+
+        '<th class="r"><span class="whatis" data-def="p90">Latency<br>p90</span></th>'+
+        '<th class="r"><span class="whatis" data-def="ctrljudged">Control<br>linkage</span></th>'+
+        '<th class="r"><span class="whatis" data-def="ctrljudged">Control<br>belonging</span></th>'+
+        '<th class="r"><span class="whatis" data-def="ctrljudged">Control<br>next step</span></th></tr>'+
+        srows2.map(function(m){
+          return '<tr><td class="model">'+mlogo(m.model)+m.model+'</td>'+
+          '<td class="r">'+sv(m.claims_per_conv)+'</td><td class="r">'+sv(m.out_tokens)+'</td>'+
+          '<td class="r">'+sv(m.latency_s,' s')+'</td><td class="r">'+sv(m.latency_p90,' s')+'</td>'+
+          '<td class="r">'+sv(m.linkage_c)+'</td><td class="r">'+sv(m.belonging_c)+'</td>'+
+          '<td class="r">'+sv(m.actionability_c)+'</td></tr>';}).join('')+'</table>';
+    }
+  }
+  /* model x use-case matrix */
+  if(D.matrix && D.matrix.length){
+    var mb=document.getElementById('matrixbox');
+    if(mb){
+      var mods2=D.models.slice().sort(function(a,b){return (b.facts_grounded||0)-(a.facts_grounded||0);}).map(function(m){return m.model;});
+      var ucs2=[]; D.matrix.forEach(function(x){if(ucs2.indexOf(x.u)<0)ucs2.push(x.u);});
+      var mxmap={}; D.matrix.forEach(function(x){mxmap[x.u+'|'+x.m]=x;});
+      var h='<table><tr><th>Use case</th>'+mods2.map(function(m){
+        return '<th class="r" style="min-width:58px">'+mlogo(m)+'<br>'+shortName(m)+'</th>';}).join('')+'</tr>';
+      ucs2.forEach(function(u){
+        var best=null;
+        mods2.forEach(function(m){var x=mxmap[u+'|'+m];
+          if(x&&x.gf!=null&&(best==null||x.gf>best)) best=x.gf;});
+        h+='<tr><td style="font-size:12.5px"><b>'+u+'</b></td>'+mods2.map(function(m){
+          var x=mxmap[u+'|'+m];
+          if(!x || x.gf==null) return '<td class="r" style="color:var(--mute)">&ndash;</td>';
+          var isBest=(x.gf==best);
+          return '<td class="r num mx" data-u="'+u.replace(/"/g,'&quot;')+'" data-m="'+m+'" '+
+            'style="cursor:pointer;'+(isBest?'font-weight:bold;text-decoration:underline;text-underline-offset:3px':'color:var(--ink2)')+'">'+
+            Math.round(x.gf)+'</td>';
+        }).join('')+'</tr>';
+      });
+      mb.innerHTML=h+'</table>';
+      mb.addEventListener('click',mxClick);
+    }
+  }
+  /* areas and tracks */
+  if(D.areas && D.areas.length){
+    var ab=document.getElementById('areabody');
+    if(ab){
+      function av(x,suf){return x==null?'<span style="color:var(--mute)">&ndash;</span>':'<span class="num">'+x+(suf||'')+'</span>';}
+      ab.innerHTML=D.areas.slice().sort(function(a,b){return (b.gf||0)-(a.gf||0);}).map(function(a){
+        return '<tr><td><b>'+a.area+'</b></td><td class="r num">'+a.n+'</td>'+
+        '<td class="r">'+av(a.gf,'%')+'</td><td class="r">'+av(a.margin!=null?'+'+a.margin:null,' pp')+'</td>'+
+        '<td class="r">'+av(a.lk)+'</td><td class="r">'+av(a.bg)+'</td></tr>';}).join('');
+      document.getElementById('arealive').innerHTML='<span class="flag ok">LIVE</span>';
+    }
+  }
+  if(D.tracks && D.tracks.length){
+    var tb2=document.getElementById('trackbody');
+    if(tb2){
+      function tv(x,suf){return x==null?'<span style="color:var(--mute)">&ndash;</span>':'<span class="num">'+x+(suf||'')+'</span>';}
+      tb2.innerHTML=D.tracks.map(function(t){
+        return '<tr><td><b>'+(t.track=='hs'?'High school':'College / adult')+'</b></td><td class="r num">'+t.n+'</td>'+
+        '<td class="r">'+tv(t.gf,'%')+'</td><td class="r">'+tv(t.margin!=null?'+'+t.margin:null,' pp')+'</td>'+
+        '<td class="r">'+tv(t.lk)+'</td><td class="r">'+tv(t.bg)+'</td><td class="r">'+tv(t.act)+'</td>'+
+        '<td class="r">'+tv(t.gate,'%')+'</td></tr>';}).join('');
+      document.getElementById('tracklive').innerHTML='<span class="flag ok">LIVE</span>';
+    }
   }
   /* simulations: render into the outputs section, grouped by student model */
   if(D.sims && D.sims.length){
@@ -1234,7 +1444,9 @@ renderGrid(); renderUC(); coverage();
         '<td class="r num">'+s.n+'</td><td class="r num">'+s.act+'%</td><td class="r num">'+s.ask_more+'%</td>'+
         '<td class="r num">'+s.step_away+'%</td><td class="r num">'+s.intent_this_week+'%</td>'+
         '<td class="r num"'+(s.uncited_uptake>8?' style="color:var(--red);font-weight:bold"':'')+'>'+s.uncited_uptake+'%</td>'+
-        '<td class="r num">'+s.trust_up+'%</td></tr>';}).join('');
+        '<td class="r num">'+(s.cited_uptake==null?'&ndash;':s.cited_uptake+'%')+'</td>'+
+        '<td class="r num">'+s.trust_up+'%</td>'+
+        '<td class="r num"'+(s.trust_down>15?' style="color:var(--red);font-weight:bold"':'')+'>'+(s.trust_down==null?'&ndash;':s.trust_down+'%')+'</td></tr>';}).join('');
     }
     window.renderSims=function(){
       var out=document.getElementById('simout');
@@ -1271,7 +1483,9 @@ renderGrid(); renderUC(); coverage();
           '<th class="r"><span class="whatis" data-def="stepaway">Steps away</span></th>'+
           '<th class="r"><span class="whatis" data-def="intent">Intent: this week</span></th>'+
           '<th class="r"><span class="whatis" data-def="uncited">Uncited uptake</span></th>'+
-          '<th class="r"><span class="whatis" data-def="trust">Trust up</span></th></tr>'+rows(list)+'</table></div>';
+          '<th class="r"><span class="whatis" data-def="cited">Cited uptake</span></th>'+
+          '<th class="r"><span class="whatis" data-def="trust">Trust up</span></th>'+
+          '<th class="r"><span class="whatis" data-def="trustdown">Trust down</span></th></tr>'+rows(list)+'</table></div>';
       });
       var out2=document.getElementById('simout');
       out2.style.border='none'; out2.style.padding='0'; out2.style.color='inherit'; out2.innerHTML=html;
