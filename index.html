@@ -308,14 +308,14 @@ results/sims.jsonl, quoted verbatim, once a reviewed example is selected.</p>
 
 <h2><span class="no">3</span>Four models of the student: how decisions get made</h2>
 <p class="note">A real student is not one decision style. Every conversation is simulated four
-times, once per style, on the high school track first. If advice only works for the rational
-student, it does not work.</p>
+times, once per style, on the high school track first. If advice only works for the
+evidence-first student, it does not work.</p>
 <table class="sans" style="max-width:900px">
   <tr><th style="width:20%">Student model</th><th style="width:44%">How this student decides</th><th>What it stress-tests</th></tr>
-  <tr><td><b>Rational</b></td><td>Weighs evidence by source quality. A cited number updates the belief; an uncited one gets little weight.</td><td>the best case: the ceiling for grounded advice</td></tr>
-  <tr><td><b>Irrational</b></td><td>Recent and vivid beats statistical. A story beats a source. Anchors on the first number heard; sometimes keeps the old belief despite evidence.</td><td>misinformation uptake: does an uncited wrong number stick?</td></tr>
-  <tr><td><b>Anxious-avoidant</b></td><td>Afraid of choosing wrong. Pressure or ambiguity triggers withdrawal; acts only on warmth plus one small concrete step.</td><td>step-away rate: does the advice's tone cost engagement?</td></tr>
-  <tr><td><b>Social-proof</b></td><td>Family and peer views outweigh documents. The advisor's number competes with what a cousin said.</td><td>whether grounding survives contact with the kitchen table</td></tr>
+  <tr><td><b>Evidence-first</b><br><span style="color:var(--mute);font-size:10.5px">logged as rational</span></td><td>Weighs evidence by source quality. A cited number updates the belief; an uncited one gets little weight.</td><td>the best case: the ceiling for grounded advice</td></tr>
+  <tr><td><b>Story-led</b><br><span style="color:var(--mute);font-size:10.5px">logged as irrational</span></td><td>Recent and vivid beats statistical. A story beats a source. Anchors on the first number heard; sometimes keeps the old belief despite evidence.</td><td>misinformation uptake: does an uncited wrong number stick?</td></tr>
+  <tr><td><b>Cautious engager</b><br><span style="color:var(--mute);font-size:10.5px">logged as anxious_avoidant</span></td><td>Afraid of choosing wrong. Pressure or ambiguity triggers withdrawal; acts only on warmth plus one small concrete step.</td><td>step-away rate: does the advice's tone cost engagement?</td></tr>
+  <tr><td><b>Family-first</b><br><span style="color:var(--mute);font-size:10.5px">logged as social_proof</span></td><td>Family and peer views outweigh documents. The advisor's number competes with what a cousin said.</td><td>whether grounding survives contact with the kitchen table</td></tr>
 </table>
 
 <h2><span class="no">4</span>Simulation outputs <span id="simlive"></span></h2>
@@ -1215,8 +1215,8 @@ renderGrid(); renderUC(); coverage();
   }
   /* simulations: render into the outputs section, grouped by student model */
   if(D.sims && D.sims.length){
-    var BNAMES={rational:"Rational student",irrational:"Irrational student",
-      anxious_avoidant:"Anxious-avoidant student",social_proof:"Social-proof student",default:"Default"};
+    var BNAMES={rational:"Evidence-first student",irrational:"Story-led student",
+      anxious_avoidant:"Cautious engager",social_proof:"Family-first student",default:"Default"};
     document.getElementById('simlive').innerHTML='<span class="flag ok">LIVE</span>';
     var seg=document.getElementById('simseg'); if(seg) seg.style.display='inline-flex';
     var ctl=document.getElementById('simctl');
