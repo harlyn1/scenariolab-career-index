@@ -1012,9 +1012,14 @@ function mxClick(ev){
   var e=window.CI_EX && CI_EX.results && CI_EX.results[u] && CI_EX.results[u][m];
   var det=document.createElement('tr'); det.className='cmprow'; det.setAttribute('data-src',m);
   var cols=tr.cells.length;
+  var agg=(window.CI_DATA&&CI_DATA.matrix)?CI_DATA.matrix.find(function(x){return x.u==u&&x.m==m;}):null;
+  var aggnote=agg&&agg.cl?'<p class="cmpctx">The score in this cell pools <b>'+agg.cl+
+    ' checkable claims</b> across up to 6 conversations at this crossing (3 cells &times; 2 students). '+
+    'The stored example below is one of those conversations, kept at the same juncture for every model; '+
+    'it may itself contain few claims or none.</p>':'';
   if(!e){ det.innerHTML='<td colspan="'+cols+'"><span class="pend">No stored transcript for this crossing.</span></td>'; }
   else{
-    det.innerHTML='<td colspan="'+cols+'"><div class="cmpcard" style="max-width:720px"><div class="hd">'+
+    det.innerHTML='<td colspan="'+cols+'">'+aggnote+'<div class="cmpcard" style="max-width:720px"><div class="hd">'+
       mlogo(m)+esc(m)+' on '+esc(u)+' <span style="font-weight:normal;color:var(--mute)">(student '+esc(e.persona)+', cell '+esc(e.cell)+')</span></div>'+
       '<div style="font-style:italic;color:var(--mute)">asked: &ldquo;'+esc(e.q.slice(0,140))+(e.q.length>140?'&hellip;':'')+'&rdquo;</div>'+
       '<div class="ans" style="max-height:200px">'+esc(e.a)+'</div>'+
