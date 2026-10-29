@@ -177,6 +177,175 @@ draft answer key (verification pending) &middot; judge calibration pending &midd
   <button id="bt-grid" onclick="showTab('grid')">The full grid</button>
   <button id="bt-hitl" onclick="showTab('hitl')">Human review</button>
   <button id="bt-sim" onclick="showTab('sim')">Simulations</button>
+  <button id="bt-ft" onclick="showTab('ft')">Fine-tuning</button>
+</div>
+
+<div id="tab-ft" hidden>
+<h2 style="border-top:none;margin-top:34px"><span class="no">&nbsp;</span>Could fine-tuning fix what scored low?</h2>
+<p class="note">Hypotheses, not findings. Every criterion below scored under 90 for most or all models
+in run 001. For each one we state a mechanism we believe explains the deficit, the tuning data that
+mechanism calls for, and a prediction specific enough to be wrong. Each prediction is testable by
+re-running the same grid against a tuned model: the eval set does not change, so before/after is clean.
+Cheapest intervention is always tried first: a system-rule change costs nothing and sets the bar any
+tuning run has to beat.</p>
+
+<table class="sans" id="fttable">
+  <tr><th style="width:17%">Deficit (measured)</th><th style="width:27%">Hypothesis: why scores sit low</th>
+      <th style="width:20%">Tuning data it calls for</th><th style="width:21%">Prediction to test</th>
+      <th>Cheapest test first</th></tr>
+  <tr>
+    <td><b>Linkage</b><br><span class="num" id="ft-lk" style="font-size:11px;color:var(--mute)">pending</span></td>
+    <td>Models give correct <i>generic</i> advice instead of advising from this student's own records. The
+    stored transcripts show the records are read but rarely quoted before a recommendation. We believe this
+    is a format habit, not missing knowledge.</td>
+    <td>2&ndash;5k advising turns where every recommendation is preceded by a quoted student record.
+    Bootstrap: our own top-linkage transcripts, edited by counselors.</td>
+    <td>Supervised tuning lifts linkage 15&ndash;25 points on the same grid, with facts unchanged.</td>
+    <td>One added system rule ("quote the record you are using before each recommendation") re-run on 2
+    models, ~$8. If the rule alone gains 10+ points, tune later.</td>
+  </tr>
+  <tr>
+    <td><b>Actionability</b><br><span class="num" id="ft-act" style="font-size:11px;color:var(--mute)">pending</span></td>
+    <td>The judge's rationales repeat one phrase: many steps suggested, none assigned. Models hedge by
+    listing options. A single named step with a deadline is a stylistic convention a model can learn.</td>
+    <td>Paired rewrites: the same answer with an option list vs with one named step and a date.</td>
+    <td>Tuning lifts actionability 20+ points; step-away rates for cautious engagers fall with it
+    (the two should move together if the mechanism is real).</td>
+    <td>System rule already half-asks for this; sharpen it to "exactly one next step, named, dated"
+    and re-run, ~$8.</td>
+  </tr>
+  <tr>
+    <td><b>Facts correct</b><br><span class="num" id="ft-gf" style="font-size:11px;color:var(--mute)">pending</span></td>
+    <td>Misses in the claim audits are mostly paraphrase drift (rounding past the &plusmn;7% window, unit
+    switches) and volunteered numbers from memory beyond the cards. The model grounds, then keeps talking.</td>
+    <td>Card-grounded dialogues where every number is stated verbatim with its card named, and
+    out-of-card questions are answered "I do not have that."</td>
+    <td>Cite-then-state tuning pushes facts above 95 and cuts claims volume slightly; the said-but-on-no-card
+    lists in the examples shrink toward zero.</td>
+    <td>Tighten rule 2 to "state card numbers verbatim; never round" and re-run, ~$8.</td>
+  </tr>
+  <tr>
+    <td><b>Safety gate</b><br><span class="num" id="ft-gate" style="font-size:11px;color:var(--mute)">pending</span></td>
+    <td>Keyword-coding of failure reasons points at one dominant mode: status-dependent advice given before
+    a screening question. That is an ordering habit. But part of the gap may be judge strictness, which
+    tuning the advisor cannot fix.</td>
+    <td>Screen-first dialogues: eligibility-touching questions answered with one neutral screening question
+    before any advice.</td>
+    <td>Tuning lifts gate pass above 95 <i>on adjudicated verdicts</i>. If counselors overturn many judge
+    FAILs first, the deficit was the judge's, and tuning is not the fix.</td>
+    <td>Adjudicate the 40 recorded failures before any tuning. Counselor hours, $0 API.</td>
+  </tr>
+  <tr>
+    <td><b>Uncited uptake (sims)</b><br><span class="num" id="ft-unc" style="font-size:11px;color:var(--mute)">pending</span></td>
+    <td>Simulated students adopt numbers that arrive without a named source, in both arms. The lever sits
+    on the advisor side: a number with a source becomes cited uptake, which is the safe kind.</td>
+    <td>Same source-naming data as the facts row; this is one tuning run measured on two instruments.</td>
+    <td>Advisor tuning roughly halves uncited uptake and raises cited uptake by the same amount, without
+    lowering act rates. Story-led students show the biggest shift.</td>
+    <td>Re-run sims on the two rule-tuned models from the rows above, ~$6. No new tuning needed to test.</td>
+  </tr>
+  <tr>
+    <td><b>Engagement collapse (sims)</b><br><span class="num" id="ft-eng" style="font-size:11px;color:var(--mute)">pending</span></td>
+    <td>One model family loses the simulated student: low act rates, trust falling, step-away spiking for
+    cautious engagers. The transcripts read terse and list-heavy. We believe tone, not content, drives it.</td>
+    <td>Warmth-plus-one-small-step exemplars drawn from our own highest trust-up transcripts.</td>
+    <td>Tone tuning cuts that model's step-away below 10% and lifts trust-up above 60% for cautious
+    engagers, with facts unchanged (content held constant is the point).</td>
+    <td>Try the tone rules in the system prompt on that one model, ~$3.</td>
+  </tr>
+</table>
+
+<h2><span class="no">&nbsp;</span>Fine-tuning vs runtime changes: which lever pulls what</h2>
+<p class="note">Tuning is not the only lever, and often not the first. The table compares it with the
+runtime changes that need no training at all. The cost and latency columns matter because output tokens
+drive both: in run 001 a conversation cost $0.013&ndash;0.157 and a median reply took 5.6&ndash;39.3
+seconds, and both scale with how much the model writes and how many calls we make.</p>
+<table class="sans" id="fttable2">
+  <tr><th style="width:15%">Lever</th><th style="width:25%">What it could improve (hypothesis)</th>
+      <th style="width:14%">Build cost</th><th style="width:16%">Per-conversation cost</th>
+      <th style="width:14%">Latency</th><th>Limit</th></tr>
+  <tr>
+    <td><b>System rules</b><br><span style="color:var(--mute);font-size:10.5px">runtime, reversible in minutes</span></td>
+    <td>First cut at every format deficit: quote-the-record (linkage), one dated step (actionability),
+    verbatim card numbers (facts), screen-first (gate).</td>
+    <td>$0</td>
+    <td>Unchanged (a few dozen extra prompt tokens).</td>
+    <td>Unchanged.</td>
+    <td>A ceiling: rules decay over long conversations and models revert under pressure. Sets the bar
+    tuning must beat.</td>
+  </tr>
+  <tr>
+    <td><b>Supervised fine-tuning</b><br><span style="color:var(--mute);font-size:10.5px">training, durable</span></td>
+    <td>Makes the same format habits stick without prompt budget: linkage, cite-then-state, single step,
+    warmth. Verbosity tuning is the sleeper: shorter answers cut cost and latency at once.</td>
+    <td>Roughly $50&ndash;500 per open-weight model (LoRA on 2&ndash;5k examples) plus curation time;
+    closed models only where the provider offers tuning.</td>
+    <td>Neutral on open weights; some providers price tuned models above base. A 30% output cut would
+    trim cost ~25%.</td>
+    <td>Neutral, or better if answers shorten.</td>
+    <td>Not available for every closed model on the board. Risk of regression elsewhere: the full grid
+    re-runs after every tune.</td>
+  </tr>
+  <tr>
+    <td><b>Better record cards</b><br><span style="color:var(--mute);font-size:10.5px">runtime, data not model</span></td>
+    <td>Facts and margins directly: verified values end the provisional flag; more cards per cell raise
+    the ceiling on what grounding can score. The thin-band finding says this lever is strongest exactly
+    where data is sparse.</td>
+    <td>Analyst time; $0 API.</td>
+    <td>Pennies: extra cards are input tokens, and input is 5&ndash;25&times; cheaper than output here.</td>
+    <td>Negligible.</td>
+    <td>Cannot fix linkage, tone, or ordering; those live in the model's habits.</td>
+  </tr>
+  <tr>
+    <td><b>Structured output</b><br><span style="color:var(--mute);font-size:10.5px">runtime, per-call</span></td>
+    <td>Citation compliance by construction: force a number-plus-source pair format and a Sources line,
+    so uncited numbers cannot be emitted at all. Uncited uptake in sims should fall mechanically.</td>
+    <td>A day of pipeline work.</td>
+    <td>Unchanged.</td>
+    <td>Unchanged to slightly up.</td>
+    <td>Grammar-constrained decoding is uneven across closed APIs; can make answers stilted, which the
+    belonging and trust scores would catch.</td>
+  </tr>
+  <tr>
+    <td><b>Self-check second pass</b><br><span style="color:var(--mute);font-size:10.5px">runtime, scaffolding</span></td>
+    <td>The model audits its own draft against the cards before sending: our hypothesis is facts above
+    95 on any model, tuned or not, because the claim audit we run after the fact moves inside the loop.</td>
+    <td>A day of pipeline work.</td>
+    <td>Roughly doubles output tokens: Argon $0.023 &rarr; ~$0.04; Fable $0.157 &rarr; ~$0.28.</td>
+    <td>Two serial calls: median ~5.6s &rarr; ~10s. The one lever here that students would feel.</td>
+    <td>Cost and latency; also hides the base model's true grounding skill, so we would report both
+    conditions.</td>
+  </tr>
+  <tr>
+    <td><b>Model routing</b><br><span style="color:var(--mute);font-size:10.5px">runtime, uses the 1c matrix</span></td>
+    <td>No model wins everywhere, so route by use case: facts-heavy crossings to the facts leader,
+    belonging- and action-heavy ones to the care leaders. The blended profile beats any single model on
+    paper today.</td>
+    <td>A day of pipeline work; the routing table is the 1c matrix we already publish.</td>
+    <td>Blended: between the cheap and dear models, weighted by traffic (~$0.03&ndash;0.06 on run 001
+    mixes).</td>
+    <td>Unchanged per call.</td>
+    <td>Voice changes between use cases; a student who crosses topics mid-conversation notices. Needs
+    the matrix at full N before trusting cell-level routing.</td>
+  </tr>
+</table>
+<p class="note sans" style="font-size:12px;color:var(--mute);margin-top:10px">
+Where each lever is the only one: closed models we cannot tune are reachable only by rules, scaffolding
+and routing. Durable zero-latency fixes that survive prompt pressure are reachable only by tuning.
+Everything on this tab is a hypothesis until the same grid is re-run against the changed system.</p>
+
+<h2><span class="no">&nbsp;</span>The ladder we would climb</h2>
+<p class="note">In order, stopping at the first rung that clears the bar: (1) system-rule changes, free,
+re-run in minutes; (2) supervised fine-tuning on small curated sets, feasible today on the open-weight
+models (Kimi, Qwen) and via tuning APIs where providers offer them; (3) preference tuning with the judge
+as a reward signal, which we would not attempt until the judge passes the counselor agreement gate,
+because optimizing against an uncalibrated judge teaches the model to please the judge, not the student.</p>
+
+<h2><span class="no">&nbsp;</span>What tuning would not fix</h2>
+<p class="note">The draft answer key (verification is a data task, not a model task). Judge
+self-family bias (fixed by a cross-family judge, not by tuning advisors). Small per-group samples in the
+equity section (fixed by more runs). And any case where adjudication shows the judge, not the model,
+was wrong: we fix instruments before we tune students to pass them.</p>
 </div>
 
 <div id="tab-sim" hidden>
@@ -861,7 +1030,7 @@ fill when the scorer logs failures by item.</p>
 <script src="career_examples.js?r=3"></script>
 <script>
 function showTab(which){
-  ['res','flow','tiers','grid','hitl','sim'].forEach(function(t){
+  ['res','flow','tiers','grid','hitl','sim','ft'].forEach(function(t){
     document.getElementById('tab-'+t).hidden = (t!==which);
     document.getElementById('bt-'+t).className = (t===which)?'on':'';
   });
@@ -1496,6 +1665,28 @@ renderGrid(); renderUC(); coverage();
       out2.style.border='none'; out2.style.padding='0'; out2.style.color='inherit'; out2.innerHTML=html;
     };
     window.renderSims();
+  }
+  /* fine-tuning tab: measured deficit lines */
+  if(D.models && D.models.length){
+    function ftr(key,suf){
+      var vs=D.models.map(function(m){return m[key];}).filter(function(x){return x!=null;});
+      if(!vs.length) return null;
+      var lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs);
+      var under=vs.filter(function(x){return x<90;}).length;
+      return lo+(suf||'')+'&ndash;'+hi+(suf||'')+' &middot; '+under+' of '+vs.length+' models under 90';
+    }
+    function fset(id,txt){var el=document.getElementById(id); if(el&&txt) el.innerHTML=txt;}
+    fset('ft-lk',ftr('linkage'));
+    fset('ft-act',ftr('actionability'));
+    fset('ft-gf',ftr('facts_grounded','%'));
+    fset('ft-gate',ftr('gate_pass','%'));
+    if(D.sims && D.sims.length){
+      var unc=D.sims.map(function(s){return s.uncited_uptake;}).filter(function(x){return x!=null;});
+      if(unc.length) fset('ft-unc',Math.min.apply(null,unc)+'%&ndash;'+Math.max.apply(null,unc)+'% across rows');
+      var acts=D.sims.filter(function(s){return s.behavior=='anxious_avoidant';})
+        .map(function(s){return s.step_away;}).filter(function(x){return x!=null;});
+      if(acts.length) fset('ft-eng','step-away up to '+Math.max.apply(null,acts)+'% for cautious engagers');
+    }
   }
   /* sub-need margins, bands, judged compare, gate items */
   if(D.subneeds){
